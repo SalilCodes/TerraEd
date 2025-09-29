@@ -12,7 +12,7 @@ import { Leaderboard } from "@/components/leaderboard"
 import { PremiumStatsCard } from "@/components/premium-stats-card"
 import { FloatingActionButton } from "@/components/floating-action-button"
 import { ConfettiAnimation } from "@/components/confetti-animation"
-import { Star, Flame, Trophy, Target, Calendar, Plus, Bell, Settings, LogOut, Sparkles, Award } from "lucide-react"
+import { Star, Flame, Trophy, Target, Calendar, Plus, Bell, Settings, LogOut, Sparkles, Award, MapPin } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import type { User, Quest, ImpactStats, LeaderboardEntry } from "@/lib/types"
@@ -20,6 +20,7 @@ import type { User, Quest, ImpactStats, LeaderboardEntry } from "@/lib/types"
 export default function StudentDashboard() {
   const [user, setUser] = useState<User | null>(null)
   const [activeQuests, setActiveQuests] = useState<Quest[]>([])
+  const [seasonalQuests, setSeasonalQuests] = useState<Quest[]>([])
   const [impactStats, setImpactStats] = useState<ImpactStats | null>(null)
   const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([])
   const [showConfetti, setShowConfetti] = useState(false)
@@ -85,6 +86,81 @@ export default function StudentDashboard() {
       },
     ]
 
+    const mockSeasonalQuests: Quest[] = [
+      {
+        id: "seasonal-1",
+        title: "Winter Bird Feeding Station",
+        description: "Create a bird feeding station to help local birds survive the winter months",
+        category: "Wildlife Conservation",
+        difficulty: "Easy",
+        points: 30,
+        duration: "60min",
+        location: "School grounds",
+        image: "/placeholder.jpg",
+        isActive: true,
+        isCompleted: false,
+        isSeasonal: true,
+        seasonalEndDate: "2025-03-20T23:59:59Z",
+        tags: ["Winter", "Wildlife", "Seasonal"],
+        requirements: ["Bird feeder materials", "Bird seed", "Camera for documentation"],
+        rewards: ["Winter Conservation Badge", "Wildlife Helper Certificate"],
+      },
+      {
+        id: "seasonal-2",
+        title: "Spring Garden Preparation",
+        description: "Prepare the school garden for spring planting season",
+        category: "Gardening",
+        difficulty: "Medium",
+        points: 40,
+        duration: "90min",
+        location: "School garden",
+        image: "/placeholder.jpg",
+        isActive: true,
+        isCompleted: false,
+        isSeasonal: true,
+        seasonalEndDate: "2025-05-31T23:59:59Z",
+        tags: ["Spring", "Gardening", "Seasonal"],
+        requirements: ["Garden tools", "Compost", "Seeds"],
+        rewards: ["Spring Gardener Badge", "Green Thumb Certificate"],
+      },
+      {
+        id: "seasonal-3",
+        title: "Summer Beach Cleanup",
+        description: "Organize a beach cleanup to protect marine life during summer",
+        category: "Waste Management",
+        difficulty: "Easy",
+        points: 35,
+        duration: "120min",
+        location: "Local beach",
+        image: "/placeholder.jpg",
+        isActive: true,
+        isCompleted: false,
+        isSeasonal: true,
+        seasonalEndDate: "2025-08-31T23:59:59Z",
+        tags: ["Summer", "Ocean", "Seasonal"],
+        requirements: ["Trash bags", "Gloves", "Water bottles"],
+        rewards: ["Ocean Protector Badge", "Summer Hero Certificate"],
+      },
+      {
+        id: "seasonal-4",
+        title: "Autumn Leaf Composting",
+        description: "Create compost from fallen leaves to enrich soil for next year",
+        category: "Waste Management",
+        difficulty: "Medium",
+        points: 25,
+        duration: "75min",
+        location: "School grounds",
+        image: "/placeholder.jpg",
+        isActive: true,
+        isCompleted: false,
+        isSeasonal: true,
+        seasonalEndDate: "2025-11-30T23:59:59Z",
+        tags: ["Autumn", "Composting", "Seasonal"],
+        requirements: ["Rake", "Compost bin", "Leaves"],
+        rewards: ["Compost Master Badge", "Autumn Steward Certificate"],
+      },
+    ]
+
     const mockImpact: ImpactStats = {
       userId,
       treesPlanted: 3,
@@ -104,6 +180,7 @@ export default function StudentDashboard() {
         rank: 1,
         streak: 3,
         questsCompleted: 8,
+        badges: ["Eco Influencer"],
       },
       {
         userId: "student1",
@@ -113,6 +190,7 @@ export default function StudentDashboard() {
         rank: 2,
         streak: 5,
         questsCompleted: 6,
+        badges: [],
       },
       {
         userId: "student3",
@@ -122,10 +200,12 @@ export default function StudentDashboard() {
         rank: 3,
         streak: 1,
         questsCompleted: 4,
+        badges: [],
       },
     ]
 
     setActiveQuests(mockQuests)
+    setSeasonalQuests(mockSeasonalQuests)
     setImpactStats(mockImpact)
     setLeaderboard(mockLeaderboard)
   }
@@ -267,6 +347,28 @@ export default function StudentDashboard() {
                 )}
               </motion.div>
             </div>
+
+            {/* Class and Section Info */}
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+              className="text-right"
+            >
+              <div className="bg-gradient-to-br from-primary/5 to-success/5 rounded-xl p-4 border border-primary/10">
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="w-2 h-2 bg-primary rounded-full"></div>
+                  <span className="text-sm font-medium text-muted-foreground">Academic Info</span>
+                </div>
+                <div className="space-y-1">
+                  <div className="text-lg font-bold text-display">Class 9</div>
+                  <div className="text-sm text-muted-foreground">Section A</div>
+                </div>
+                <div className="mt-2 text-xs text-muted-foreground">
+                  Green Valley High School
+                </div>
+              </div>
+            </motion.div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
@@ -346,6 +448,130 @@ export default function StudentDashboard() {
                     <QuestCard quest={quest} onStartQuest={handleStartQuest} />
                   </motion.div>
                 ))}
+              </div>
+            </motion.section>
+
+            {/* Seasonal Quests */}
+            <motion.section
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.5 }}
+            >
+              <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center gap-3">
+                  <h2 className="text-2xl font-bold text-display">Seasonal Quests</h2>
+                  <Badge className="bg-gradient-to-r from-orange-500 to-red-500 text-white px-3 py-1">
+                    Limited Time
+                  </Badge>
+                </div>
+                <Link href="/student/quests?filter=seasonal">
+                  <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="hover:bg-primary/5 hover:border-primary/30 bg-transparent"
+                    >
+                      <Plus className="w-4 h-4 mr-2" />
+                      View All Seasonal
+                    </Button>
+                  </motion.div>
+                </Link>
+              </div>
+
+              <div className="grid md:grid-cols-2 gap-6">
+                {seasonalQuests.map((quest, index) => {
+                  const endDate = new Date(quest.seasonalEndDate || "")
+                  const now = new Date()
+                  const daysLeft = Math.ceil((endDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24))
+                  
+                  return (
+                    <motion.div
+                      key={quest.id}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5, delay: 0.6 + index * 0.1 }}
+                      className="relative"
+                    >
+                      <Card className="overflow-hidden border-2 border-gradient-to-r from-orange-200 to-red-200 hover:shadow-lg transition-all duration-300">
+                        <div className="relative">
+                          <div className="absolute top-3 left-3 z-10 flex gap-2">
+                            <Badge className="bg-gradient-to-r from-orange-500 to-red-500 text-white text-xs">
+                              <Calendar className="w-3 h-3 mr-1" />
+                              {daysLeft > 0 ? `${daysLeft} days left` : "Expired"}
+                            </Badge>
+                            <Badge variant="secondary" className="bg-blue-100 text-blue-800 text-xs">
+                              Seasonal
+                            </Badge>
+                          </div>
+                          <div className="aspect-video bg-gradient-to-br from-orange-100 to-red-100 flex items-center justify-center">
+                            <div className="text-center">
+                              <div className="w-16 h-16 bg-gradient-to-br from-orange-400 to-red-400 rounded-full flex items-center justify-center mb-2 mx-auto">
+                                <Award className="w-8 h-8 text-white" />
+                              </div>
+                              <p className="text-sm text-orange-700 font-medium">Seasonal Quest</p>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        <CardContent className="p-6">
+                          <div className="flex items-start justify-between mb-3">
+                            <div className="flex-1">
+                              <h3 className="font-bold text-lg mb-1">{quest.title}</h3>
+                              <p className="text-muted-foreground text-sm mb-3">{quest.description}</p>
+                            </div>
+                            <div className="text-right">
+                              <div className="text-2xl font-bold text-primary">★{quest.points}</div>
+                              <div className="text-xs text-muted-foreground">points</div>
+                            </div>
+                          </div>
+
+                          <div className="flex items-center gap-4 mb-4 text-sm text-muted-foreground">
+                            <div className="flex items-center gap-1">
+                              <Target className="w-4 h-4" />
+                              {quest.difficulty}
+                            </div>
+                            <div className="flex items-center gap-1">
+                              <Calendar className="w-4 h-4" />
+                              {quest.duration}
+                            </div>
+                            <div className="flex items-center gap-1">
+                              <MapPin className="w-4 h-4" />
+                              {quest.location}
+                            </div>
+                          </div>
+
+                          {quest.tags && quest.tags.length > 0 && (
+                            <div className="flex flex-wrap gap-1 mb-4">
+                              {quest.tags.map((tag, tagIndex) => (
+                                <Badge key={tagIndex} variant="outline" className="text-xs">
+                                  {tag}
+                                </Badge>
+                              ))}
+                            </div>
+                          )}
+
+                          <div className="flex items-center justify-between">
+                            <div className="text-xs text-muted-foreground">
+                              {quest.rewards && quest.rewards.length > 0 && (
+                                <div>
+                                  <span className="font-medium">Rewards: </span>
+                                  {quest.rewards.join(", ")}
+                                </div>
+                              )}
+                            </div>
+                            <Button
+                              onClick={() => handleStartQuest(quest.id)}
+                              className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white"
+                              size="sm"
+                            >
+                              Start Quest
+                            </Button>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </motion.div>
+                  )
+                })}
               </div>
             </motion.section>
 

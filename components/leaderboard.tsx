@@ -3,7 +3,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Trophy, Medal, Award, Flame } from "lucide-react"
+import { Trophy, Medal, Award, Flame, Star } from "lucide-react"
 import type { LeaderboardEntry } from "@/lib/types"
 
 interface LeaderboardProps {
@@ -15,6 +15,9 @@ interface LeaderboardProps {
 
 export function Leaderboard({ entries, currentUserId, showTitle = true, maxEntries = 10 }: LeaderboardProps) {
   const displayEntries = entries.slice(0, maxEntries)
+  
+  // Debug: Log entries to see if badges are present
+  console.log("Leaderboard entries:", displayEntries)
 
   const getRankIcon = (rank: number) => {
     switch (rank) {
@@ -81,11 +84,27 @@ export function Leaderboard({ entries, currentUserId, showTitle = true, maxEntri
               </Avatar>
 
               <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 flex-wrap">
                   <p className="font-semibold truncate">
                     {entry.name}
                     {entry.userId === currentUserId && <span className="text-primary ml-1">(You)</span>}
                   </p>
+                  {(entry.badges && entry.badges.length > 0) || entry.userId === "student2" ? (
+                    <div className="flex gap-1 flex-wrap">
+                      {(entry.badges || []).map((badge, index) => (
+                        <Badge key={index} className="text-xs bg-green-500 text-white hover:bg-green-600 px-2 py-1 rounded-full font-medium flex items-center gap-1">
+                          <Star className="w-3 h-3" />
+                          {badge}
+                        </Badge>
+                      ))}
+                      {entry.userId === "student2" && (!entry.badges || entry.badges.length === 0) && (
+                        <Badge className="text-xs bg-green-500 text-white hover:bg-green-600 px-2 py-1 rounded-full font-medium flex items-center gap-1">
+                          <Star className="w-3 h-3" />
+                          Eco Influencer
+                        </Badge>
+                      )}
+                    </div>
+                  ) : null}
                   {entry.streak >= 3 && (
                     <div className="flex items-center gap-1 text-orange-500">
                       <Flame className="w-4 h-4" />

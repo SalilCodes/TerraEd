@@ -27,11 +27,23 @@ export interface Quest {
   expiry: string
   aiGenerated: boolean
   createdBy: string
-  category: "waste" | "energy" | "water" | "biodiversity" | "transport"
-  difficulty: "easy" | "medium" | "hard"
+  category: "waste" | "energy" | "water" | "biodiversity" | "transport" | "Wildlife Conservation" | "Gardening"
+  difficulty: "easy" | "medium" | "hard" | "Easy" | "Medium" | "Hard"
   estimatedTime: number // minutes
   imageUrl?: string
   createdAt: string
+  // Additional properties for seasonal quests
+  description?: string
+  duration?: string
+  location?: string
+  image?: string
+  isActive?: boolean
+  isCompleted?: boolean
+  isSeasonal?: boolean
+  seasonalEndDate?: string
+  tags?: string[]
+  requirements?: string[]
+  rewards?: string[]
 }
 
 export interface Submission {
@@ -91,6 +103,7 @@ export interface LeaderboardEntry {
   rank: number
   streak: number
   questsCompleted: number
+  badges?: string[]
 }
 
 export interface ImpactStats {

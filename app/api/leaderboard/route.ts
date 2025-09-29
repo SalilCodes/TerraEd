@@ -21,6 +21,7 @@ export async function GET(request: NextRequest) {
         rank: 0, // Will be set after sorting
         streak: user.streak,
         questsCompleted: Math.floor(user.points / 20), // Estimate based on average points per quest
+        badges: user.id === "student2" ? ["Eco Influencer"] : [], // Maya Patel gets the Eco Influencer badge
       }))
       .sort((a, b) => b.points - a.points)
       .slice(0, limit)
